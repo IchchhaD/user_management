@@ -25,7 +25,7 @@ Route::get('/viewPost', [PostsController::class, 'viewPost']);
 
 Route::group(['middleware'=>'api','prefix'=>'posts'], function($router)
 {
-    //Route::post('/create', [ ::class, 'create']);
+    Route::post('/create', [PostsController::class, 'create']);
     Route::put('/update', [PostsController::class, 'update']);
     Route::post('/delete', [PostsController::class, 'delete']);
 });
@@ -37,4 +37,11 @@ Route::group(['middleware'=>'api','prefix'=>'comments'], function($router)
     Route::post('/create', [CommentsController::class, 'create']);
     Route::put('/update', [CommentsController::class, 'update']);
     Route::post('/delete', [CommentsController::class, 'delete']);
+});
+
+Route::fallback(function () {
+    return response()->json([
+        'status' => '404',
+        'message' => 'Requested Url Not Found.'
+    ], 404);
 });
