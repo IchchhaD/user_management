@@ -38,6 +38,7 @@ Route::middleware('api')->group(function ()
     Route::post('/viewPosts/{postId}/createComments', [CommentsController::class, 'createComments'])->name('createComments');
     Route::put('/viewPosts/{postId}/updateComments/{commentId}', [CommentsController::class, 'updateComments'])->name('updateComments');
     Route::delete('/deleteComments/{id}', [CommentsController::class, 'deleteComments'])->name('deleteComments');
+    Route::get('/getMyComments', [CommentsController::class, 'getMyComments'])->name('getMyComments');
 });
 
 // Fallback route for unhandled requests

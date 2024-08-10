@@ -8,6 +8,8 @@ use Auth;
 
 use App\Models\Comment;
 
+use App\Events\CommentCreated;
+
 use Validator;
 use App\Helpers\Helper;
 
@@ -16,7 +18,7 @@ class CommentsController extends Controller
     public function getComments($postId)
     {
         $validator = \Validator::make(['post_id' => $postId], [
-            'post_id' => 'required|numeric',
+            'post_id' => 'required|numeric|exists:posts,id',
         ]);
         if($validator->fails())
         {
@@ -57,7 +59,7 @@ class CommentsController extends Controller
             return response()->json(['error' => $validator_req->errors()], 400);
         }
         $validator_id = \Validator::make(['post_id' => $postId], [
-            'post_id' => 'required|numeric',
+            'post_id' => 'required|numeric|exists:posts,id',
         ]);
         if($validator_id->fails())
         {
@@ -104,14 +106,14 @@ class CommentsController extends Controller
             return response()->json(['error' => $validator_req->errors()], 400);
         }
         $validator_id = \Validator::make(['post_id' => $postId], [
-            'post_id' => 'required|numeric',
+            'post_id' => 'required|numeric|exists:posts,id',
         ]);
         if($validator_id->fails())
         {
             return response()->json(['error' => $validator_id->errors()], 400);
         }
         $validator_comment_id = \Validator::make(['comment_id' => $commentId], [
-            'comment_id' => 'required|numeric',
+            'comment_id' => 'required|numeric|exists:comments,id',
         ]);
         if($validator_comment_id->fails())
         {
@@ -160,7 +162,7 @@ class CommentsController extends Controller
     public function deleteComments($id)
     {
         $validator = \Validator::make(['id' => $id], [
-            'id' => 'required|numeric',
+            'id' => 'required|numeric|exists:comments,id',
         ]);
         if($validator->fails())
         {
@@ -203,5 +205,33 @@ class CommentsController extends Controller
                 'data' => $e->getMessage(),
             ], 401);            
         }
+    }
+    public function getMyComments()
+    {
+        try
+        {
+            $comments = Comment::where('user_id', Auth::user()->id)->with('post')->get();
+            if(!empty($comments))
+            {
+                return response()->json([
+                    'error' => false,
+                    'message' => 'Comments with post of logged in user.',
+                    'comment' => $comments,
+                ], 200);
+            }
+            return response()->json([
+                'error' => true,
+                'message' => 'No comments.',
+            ], 401);
+        }
+        catch(Exception $e)
+        {
+            return response()->json([
+                'error' => true,
+                'message' => 'Something went wrong.',
+                'data' => $e->getMessage(),
+            ], 401);            
+        }
+              
     }
 }

@@ -44,7 +44,7 @@ class PostsController extends Controller
     public function viewPosts($id)
     {
         $validator = \Validator::make(['id' => $id], [
-            'id' => 'required|numeric',
+            'id' => 'required|numeric|exists:posts,id',
         ]);
         if($validator->fails())
         {
@@ -166,7 +166,7 @@ class PostsController extends Controller
     public function deletePosts($id)
     {
         $validator = \Validator::make(['id' => $id], [
-            'id' => 'required|numeric',
+            'id' => 'required|numeric|exists:posts,id',
         ]);
         if($validator->fails())
         {

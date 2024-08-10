@@ -15,12 +15,12 @@ class Comment extends Model
 
     public $timestamps = true;
 
-    public function posts()
+    public function post()
     {
         return $this->belongsTo(Post::class);
     }
-    public function comments()
+    public function user()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(User::class);
     }
 }
