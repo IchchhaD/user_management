@@ -12,6 +12,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request)
 {
     return $request->user();
 });
+//public routes
+Route::get('/getPosts', [PostsController::class, 'getPosts'])->name('getPosts');
+Route::get('/viewPosts/{id}', [PostsController::class, 'viewPosts'])->name('viewPosts');
+Route::get('/getPosts/{postId}/getComments', [CommentsController::class, 'getComments'])->name('getComments');
 
 Route::middleware('api')->group(function ()
 {
@@ -25,17 +29,15 @@ Route::middleware('api')->group(function ()
     });
 
     // Posts routes
-    Route::get('/posts', [PostsController::class, 'getPosts']);
-    Route::get('/posts/{id}', [PostsController::class, 'viewPost']);
-    Route::post('/posts', [PostsController::class, 'createPosts']);
-    Route::put('/posts/{id}', [PostsController::class, 'updatePosts']);
-    Route::delete('/posts/{id}', [PostsController::class, 'deletePosts']);
+    Route::post('/createPosts', [PostsController::class, 'createPosts'])->name('createPosts');
+    Route::put('/updatePosts/{id}', [PostsController::class, 'updatePosts'])->name('updatePosts');
+    Route::delete('/deletePosts/{id}', [PostsController::class, 'deletePosts'])->name('deletePosts');
+    Route::get('/getMyPosts', [PostsController::class, 'getMyPosts'])->name('getMyPosts');
     
     // Comments routes
-    Route::get('/posts/{postId}/comments', [CommentsController::class, 'getComments'])->name('getComments');
-    Route::post('/posts/{postId}/comments', [CommentsController::class, 'createComments'])->name('createComments');
-    Route::put('/posts/{postId}/comments/{commentId}', [CommentsController::class, 'update'])->name('updateComments');
-    Route::delete('/posts/{postId}/comments/{commentId}', [CommentsController::class, 'delete'])->name('deleteComments');
+    Route::post('/viewPosts/{postId}/createComments', [CommentsController::class, 'createComments'])->name('createComments');
+    Route::put('/viewPosts/{postId}/updateComments/{commentId}', [CommentsController::class, 'updateComments'])->name('updateComments');
+    Route::delete('/deleteComments/{id}', [CommentsController::class, 'deleteComments'])->name('deleteComments');
 });
 
 // Fallback route for unhandled requests
