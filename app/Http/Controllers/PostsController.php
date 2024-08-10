@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Auth;
 
 use App\Models\Post;
+use App\Events\PostCreated;
 
 use Validator;
 use App\Helpers\Helper;
@@ -94,6 +95,7 @@ class PostsController extends Controller
 
             if($posts)
             {
+                PostCreated::dispatch($posts);
                 return response()->json([
                     'error' => false,
                     'message' => 'Post created',

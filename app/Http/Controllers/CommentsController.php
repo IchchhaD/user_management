@@ -73,6 +73,7 @@ class CommentsController extends Controller
 
             if($comments)
             {
+                CommentCreated::dispatch($comments,);
                 return response()->json([
                     'error' => false,
                     'message' => 'Comment created',
